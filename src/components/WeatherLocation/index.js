@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import PropTypes from 'prop-types';
 import Location from './Location';
 import WeatherData from './WeatherData';
 import transformWeather from '../../services/transformWeather';
@@ -6,22 +7,24 @@ import transformWeather from '../../services/transformWeather';
 import './styles.css';
 import { CircularProgress } from 'material-ui';
 
-const location = 'Madrid,es';
 const apiKey = 'f99bbd9e4959b513e9bd0d7f7356b38d';
-const apiWeather = `http://api.openweathermap.org/data/2.5/weather?q=${location}&appid=${apiKey}`;
+const url = "http://api.openweathermap.org/data/2.5/weather";
 
 class WeatherLocation extends Component {
 
-    constructor() {
+    constructor({ city }) {
         super();
         this.state = {
-            city: 'Madrid',
+            city,
             data: null
         };
         console.log("LHC::constructor");
     }
 
     handleUpdateClick = () => {
+        const { city } = this.state;
+        const apiWeather = `${url}?q=${city}&appid=${apiKey}`;
+
         fetch(apiWeather).then((req) => {
             console.log(req);
             return req.json();
@@ -60,5 +63,9 @@ class WeatherLocation extends Component {
             </div>
         );
     }
+}
+
+WeatherLocation.propTypes = {
+    city: PropTypes.string,
 }
 export default WeatherLocation;
